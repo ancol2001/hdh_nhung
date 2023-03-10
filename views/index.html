@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DHT22 Sensor</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        const socket = io();
+        socket.on('sensor-data', (data) => {
+            document.getElementById('temperature').innerHTML = data.nhietdo + ' &#8451;';
+            document.getElementById('humidity').innerHTML = data.doam + ' %';
+            document.getElementById('light').innerHTML = data.anhsang + ' lux';
+        });
+        function toggleLed() {
+            socket.emit('toggle-led');
+        }
+        socket.on('led-state', (state) => {
+            const button = document.getElementById('toggle');
+            if (state) {
+                button.style.backgroundColor = 'green';
+                button.innerHTML = 'LED is ON';
+            } else {
+                button.style.backgroundColor = 'red';
+                button.innerHTML = 'LED is OFF';
+            }
+        });
+    </script>
+</head>
+<body style="background-color: rgb(57, 58, 54);">
+    <div class="row" style="height:90px;margin: 5px 5px -5px 5px; background-color:rgb(50, 209, 76); border-radius: 15px;">
+        <h1 class=" text-center pt-4">Data sensor</h1>
+    </div>
+    <!--khoi hien thi cambien-->
+    <div class="row p-1">
+        <div class="col-sm p-3" style="height:210px;">
+            <div id="idnhietdo" class="text-center" style="height: 200px; background-color:rgb(226, 64, 64); border-radius: 15px;">
+                <h4 class="pt-3">Nhiệt Độ</h4>
+                <h4 id="temperature" class=" pt-5 text-black"></h4>
+            </div>
+        </div>
+        <div class="col-sm p-3" style="height:210px;">
+            <div id="iddoam" class="text-center" style="height: 200px; background-color:rgb(51, 121, 228); border-radius: 15px;">
+                <h4 class="pt-3">Độ Ẩm</h4>
+                <h4 id="humidity" class=" pt-5 text-black"></h4>
+            </div>
+        </div>
+        <div class="col-sm p-3" style="height:210px ;" >
+            <div id="idanhsang" class="text-center" style="height: 200px; background-color:rgb(240, 237, 52); border-radius: 15px;">
+                <h4 class="pt-3">Ánh sáng</h4>
+                <h4 id="light" class=" pt-5 text-black"></h4>
+            </div>
+        </div>
+    </div>
+    <!--Khoi nut bam-->
+    <div class="row p-2">
+            <div class="col-sm-6 pt-5">
+                <button id="toggle" onclick="toggleLed()" style="height: 100px;">Toggle LED</button>
+            </div>
+            <div class="col-sm-6 pt-5">
+                <button id="toggle" onclick="toggleLed()" style="height: 100px;">Toggle LED</button>
+            </div>
+
+    </div>
+    <!-- <p>Temperature: <span id="temperature"></span></p>
+    <p>Humidity: <span id="humidity"></span></p> -->
+
+</body>
+</html>
